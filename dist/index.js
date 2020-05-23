@@ -989,7 +989,7 @@ const output = __importStar(__webpack_require__(490));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield exec.exec("pip3", ["install", "yaml"]);
+            yield exec.exec("pip3", ["install", "pyyaml"]);
             output.fileError("Test!", "test_cpp/test2.cpp", 3, 18);
         }
         catch (error) {

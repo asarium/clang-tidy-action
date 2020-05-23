@@ -4,7 +4,7 @@ import * as output from "./output";
 
 async function run(): Promise<void> {
 	try {
-		await exec.exec("pip3", ["install", "yaml"]);
+		await exec.exec("pip3", ["install", "pyyaml"]);
 
 		output.fileError("Test!", "test_cpp/test2.cpp", 3, 18);
 	} catch (error) {

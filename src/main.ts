@@ -1,19 +1,15 @@
-import * as core from '@actions/core'
-import {wait} from './wait'
+import * as core from "@actions/core";
+import * as exec from "@actions/exec";
+import * as output from "./output";
 
 async function run(): Promise<void> {
-  try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`)
+	try {
+		await exec.exec("pip3", ["install", "yaml"]);
 
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
-  } catch (error) {
-    core.setFailed(error.message)
-  }
+		output.fileError("Test!", "test_cpp/test2.cpp", 3, 18);
+	} catch (error) {
+		core.setFailed(error.message);
+	}
 }
 
-run()
+run().catch(e => core.error(e));

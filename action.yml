@@ -1,10 +1,14 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'clang-tidy-action'
+description: 'Runs clang tidy against a change set'
+author: 'asarium'
 inputs:
-  myInput:              # change this
-    description: 'input description here'
-    default: 'default value if applicable'
+  clangTidyBin:
+    description: 'The clang-tidy binary to use'
+    default: 'clang-tidy'
+    required: false
+  buildDir:
+    description: 'The directory where compile_commands.json can be found'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'

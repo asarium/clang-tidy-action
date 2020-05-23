@@ -1,0 +1,11 @@
+---
+Checks: "-*,\
+modernize-use-using
+"
+WarningsAsErrors: ''
+AnalyzeTemporaryDtors: false
+CheckOptions:
+  - key:          'readability-braces-around-statements.ShortStatementLines'
+    value:        '4' # Avoid flagging simple if (...) return false; statements
+...
+

@@ -2,13 +2,27 @@ name: 'clang-tidy-action'
 description: 'Runs clang tidy against a change set'
 author: 'asarium'
 inputs:
-  clangTidyBin:
-    description: 'The clang-tidy binary to use'
-    default: 'clang-tidy'
-    required: false
   buildDir:
     description: 'The directory where compile_commands.json can be found'
     required: true
+  llvmVersion:
+    description: 'The version of LLVM/clang-tidy to use'
+    default: '9'
+    required: false
+  repoToken:
+    description: 'The GitHub token for the repository'
+    required: true
+  checkRegex:
+    description: 'Regular expression to specify which files to check'
+    default: '.*\.(cpp|cc|c|cxx|h|hpp|hh)$'
+    required: false
+  includeDirs:
+    description: 'A colon (:) separated list of additional include directories that are needed for parsing the source files. The current directory (usually the checkout directory) and /usr/include are always added.'
+    required: false
+  noFailOnIssue:
+    description: 'If true, false the step when an issue is detected'
+    required: false
+    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

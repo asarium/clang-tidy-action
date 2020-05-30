@@ -2,7 +2,7 @@
 Checks: "-*,\
 modernize-use-using
 "
-WarningsAsErrors: ''
+WarningsAsErrors: '*'
 AnalyzeTemporaryDtors: false
 CheckOptions:
   - key:          'readability-braces-around-statements.ShortStatementLines'

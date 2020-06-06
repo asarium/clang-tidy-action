@@ -27,7 +27,25 @@ jobs:
   test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
     steps:
+    - name: Install dependencies
+      run: sudo apt-get -yy install cmake
     - uses: actions/checkout@v1
-    - uses: ./
+    - name: Setup build dir
+      working-directory: ./test_cpp
+      run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
+    - name: Setup commit diff
+      working-directory: ./test_cpp
+      run: |
+        git config --global user.name ${GITHUB_ACTOR}
+        git config --global user.email ${GITHUB_ACTOR}@my-domain.io
+
+        cp test2.cpp test.cpp
+        git add .
+        git commit -m "Test"
+    - name: Execute Action
+      uses: ./
       with:
         buildDir: test_cpp/build
+        repoToken: ${{ secrets.GITHUB_TOKEN }}
+        includeDirs: /opt/include:/test
+        noFailOnIssue: true

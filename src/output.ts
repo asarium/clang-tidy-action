@@ -10,8 +10,16 @@ function escape(s: string): string {
 		.replace(/;/g, "%3B");
 }
 
-export function fileError(message: string, file: string, line: number, column: number): void {
-	const output = `::error file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
+function output(type: string, message: string, file: string, line: number, column: number): void {
+	const text = `::${type} file=${escape(file)},line=${line},col=${column}::${escapeData(message)}`;
 	// eslint-disable-next-line no-console
-	console.log(output);
+	console.log(text);
+}
+
+export function fileError(message: string, file: string, line: number, column: number): void {
+	output("error", message, file, line, column);
+}
+
+export function fileWarning(message: string, file: string, line: number, column: number): void {
+	output("warning", message, file, line, column);
 }

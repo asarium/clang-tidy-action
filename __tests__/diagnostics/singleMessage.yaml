@@ -1,0 +1,12 @@
+Diagnostics:
+  - DiagnosticMessage:
+      FileOffset: 39
+      FilePath: /singleMessage.cpp
+      Message: use 'using' instead of 'typedef'
+      Replacements:
+        - FilePath: /singleMessage.cpp
+          Length: 22
+          Offset: 39
+          ReplacementText: using myint = long
+    DiagnosticName: modernize-use-using
+MainSourceFile: ''

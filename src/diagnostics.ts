@@ -1,6 +1,7 @@
 import {promises as fs} from "fs";
 import yaml from "js-yaml";
 import lineColumn from "line-column";
+import * as core from "@actions/core";
 
 type FileReader = (path: string) => Promise<string>;
 
@@ -17,6 +18,7 @@ const defaultOptions: ParseOptions = {
 };
 
 async function determineFileLocation(path: string, offset: number, parseOptions: ParseOptions): Promise<Location> {
+	core.debug("Reading source file " + path);
 	const content = await parseOptions.fileReader(path);
 
 	const finder = lineColumn(content);
@@ -68,6 +70,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 		...options,
 	};
 
+	core.debug("Reading " + path);
 	const data = await fullOptions.fileReader(path);
 
 	const doc = yaml.safeLoad(data) as ClangReplacementFile;
@@ -77,15 +80,19 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 	}
 
 	return Promise.all(
-		doc.Diagnostics.map<Promise<Diagnostic>>(async diag => ({
-			name: diag.DiagnosticName,
-			message: diag.DiagnosticMessage.Message,
-			filePath: diag.DiagnosticMessage.FilePath,
-			location: await determineFileLocation(
-				diag.DiagnosticMessage.FilePath,
-				diag.DiagnosticMessage.FileOffset,
-				fullOptions,
-			),
-		})),
+		doc.Diagnostics.map<Promise<Diagnostic>>(async diag => {
+			core.debug("Processing diagnostic: " + JSON.stringify(diag))
+
+			return {
+				name: diag.DiagnosticName,
+				message: diag.DiagnosticMessage.Message,
+				filePath: diag.DiagnosticMessage.FilePath,
+				location: await determineFileLocation(
+					diag.DiagnosticMessage.FilePath,
+					diag.DiagnosticMessage.FileOffset,
+					fullOptions,
+				),
+			};
+		}),
 	);
 }

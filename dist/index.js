@@ -4704,13 +4704,14 @@ function parseReplacementsFile(path, options = {}) {
         if (!doc.Diagnostics) {
             return [];
         }
-        return Promise.all(doc.Diagnostics.map((diag) => __awaiter(this, void 0, void 0, function* () {
-            return ({
+        return Promise.all(doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map((diag) => __awaiter(this, void 0, void 0, function* () {
+            core.debug("Processing diagnostic: " + JSON.stringify(diag));
+            return {
                 name: diag.DiagnosticName,
                 message: diag.DiagnosticMessage.Message,
                 filePath: diag.DiagnosticMessage.FilePath,
                 location: yield determineFileLocation(diag.DiagnosticMessage.FilePath, diag.DiagnosticMessage.FileOffset, fullOptions),
-            });
+            };
         })));
     });
 }

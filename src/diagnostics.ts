@@ -80,7 +80,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 	}
 
 	return Promise.all(
-		doc.Diagnostics.map<Promise<Diagnostic>>(async diag => {
+		doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map<Promise<Diagnostic>>(async diag => {
 			core.debug("Processing diagnostic: " + JSON.stringify(diag))
 
 			return {

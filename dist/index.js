@@ -706,7 +706,9 @@ const diagnostics_1 = __webpack_require__(348);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const fixesFile = core.getInput("fixesFile");
+            const fixesFile = core.getInput("fixesFile", {
+                required: true
+            });
             const noFailure = core.getInput("noFailOnIssue") === "true";
             const diags = yield diagnostics_1.parseReplacementsFile(fixesFile);
             for (const diag of diags) {

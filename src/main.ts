@@ -5,7 +5,9 @@ import {parseReplacementsFile} from "./diagnostics";
 
 async function run(): Promise<void> {
 	try {
-		const fixesFile = core.getInput("fixesFile");
+		const fixesFile = core.getInput("fixesFile", {
+			required: true
+		});
 		const noFailure = core.getInput("noFailOnIssue") === "true";
 
 		const diags = await parseReplacementsFile(fixesFile);

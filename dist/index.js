@@ -4699,7 +4699,14 @@ function parseReplacementsFile(path, options = {}) {
     return __awaiter(this, void 0, void 0, function* () {
         const fullOptions = Object.assign(Object.assign({}, defaultOptions), options);
         core.debug("Reading " + path);
-        const data = yield fullOptions.fileReader(path);
+        let data;
+        try {
+            data = yield fullOptions.fileReader(path);
+        }
+        catch (_a) {
+            core.info("Replacement file does not exist. No errors produced.");
+            return [];
+        }
         const doc = js_yaml_1.default.safeLoad(data);
         if (!doc.Diagnostics) {
             return [];

@@ -71,7 +71,14 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 	};
 
 	core.debug("Reading " + path);
-	const data = await fullOptions.fileReader(path);
+	let data;
+	
+	try {
+		data = await fullOptions.fileReader(path);
+	} catch {
+		core.info("Replacement file does not exist. No errors produced.");
+		return [];
+	}
 
 	const doc = yaml.safeLoad(data) as ClangReplacementFile;
 

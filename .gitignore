@@ -99,5 +99,6 @@ __tests__/runner/*
 lib/**/*
 
 test_cpp/build/
+test_cpp/fixes.yaml
 
 .vscode/

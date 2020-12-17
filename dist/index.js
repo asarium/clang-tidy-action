@@ -4708,7 +4708,7 @@ function parseReplacementsFile(path, options = {}) {
             return [];
         }
         const doc = js_yaml_1.default.safeLoad(data);
-        if (!doc.Diagnostics) {
+        if (!doc || !doc.Diagnostics) {
             return [];
         }
         return Promise.all(doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map((diag) => __awaiter(this, void 0, void 0, function* () {

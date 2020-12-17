@@ -72,7 +72,6 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 
 	core.debug("Reading " + path);
 	let data;
-	
 	try {
 		data = await fullOptions.fileReader(path);
 	} catch {
@@ -82,7 +81,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 
 	const doc = yaml.safeLoad(data) as ClangReplacementFile;
 
-	if (!doc.Diagnostics) {
+	if (!doc || !doc.Diagnostics) {
 		return [];
 	}
 

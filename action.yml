@@ -1,14 +1,10 @@
 name: 'clang-tidy-action'
-description: 'Runs clang tidy against a change set'
+description: 'Exports clang-tidy diagnostics to inline comments.'
 author: 'asarium'
 inputs:
   fixesFile:
     description: 'Path to the replacement file produced by -export-fixes'
     required: true
-  noFailOnIssue:
-    description: 'If true, false the step when an issue is detected'
-    required: false
-    default: 'false'
 runs:
   using: 'node12'
   main: 'dist/index.js'

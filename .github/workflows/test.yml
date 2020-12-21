@@ -21,31 +21,55 @@ jobs:
         key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
-    - run: |
-        yarn install
-        yarn run all
-  test: # make sure the action works on a clean machine without building
+    - name: Install yarn dependencies
+      run: yarn install
+    - name: Build and check
+      run: yarn run all
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test_file: [emptyFile.yaml, noErrors.yaml, withError.yaml]
+        include:
+          - test_file: emptyFile.yaml
+            expected_outcome: success
+          - test_file: noErrors.yaml
+            expected_outcome: success
+          - test_file: withError.yaml
+            expected_outcome: failure
+    steps:
+    - name: Install dependencies
+      run: sudo apt-get -yy install cmake
+    - uses: actions/checkout@v1
+    - name: Setup fixes
+      run: sed "s:|REPO_PATH|:$GITHUB_WORKSPACE:i" "./ci/test_files/${{ matrix.test_file }}.in" > "./test_cpp/fixes.yaml"
+    - name: Execute Action
+      id: action_execution
+      uses: ./
+      continue-on-error: true
+      with:
+        fixesFile: test_cpp/fixes.yaml
+    - name: Check outcome
+      if: steps.action_execution.outcome != matrix.expected_outcome
+      run: |
+        echo Action step ended in unexpected state "${{ steps.action_execution.outcome }}"
+        exit 1
+
+  test_nonExistant:
     runs-on: ubuntu-latest
     steps:
     - name: Install dependencies
       run: sudo apt-get -yy install cmake
     - uses: actions/checkout@v1
-    - name: Setup build dir
-      working-directory: ./test_cpp
-      run: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -B build
-    - name: Setup commit diff
-      working-directory: ./test_cpp
-      run: |
-        git config --global user.name ${GITHUB_ACTOR}
-        git config --global user.email ${GITHUB_ACTOR}@my-domain.io
-
-        cp test2.cpp test.cpp
-        git add .
-        git commit -m "Test"
     - name: Execute Action
+      id: action_execution
       uses: ./
+      continue-on-error: true
       with:
-        buildDir: test_cpp/build
-        repoToken: ${{ secrets.GITHUB_TOKEN }}
-        includeDirs: /opt/include:/test
-        noFailOnIssue: true
+        fixesFile: test_cpp/fixes.yaml
+    - name: Check outcome
+      if: steps.action_execution.outcome != 'success'
+      run: |
+        echo Action step ended in unexpected state "${{ steps.action_execution.outcome }}"
+        exit 1

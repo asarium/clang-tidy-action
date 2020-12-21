@@ -18,7 +18,7 @@ const defaultOptions: ParseOptions = {
 };
 
 async function determineFileLocation(path: string, offset: number, parseOptions: ParseOptions): Promise<Location> {
-	core.debug("Reading source file " + path);
+	core.debug(`Reading source file ${path}`);
 	const content = await parseOptions.fileReader(path);
 
 	const finder = lineColumn(content);
@@ -70,7 +70,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 		...options,
 	};
 
-	core.debug("Reading " + path);
+	core.debug(`Reading ${path}`);
 	let data;
 	try {
 		data = await fullOptions.fileReader(path);
@@ -87,7 +87,7 @@ export async function parseReplacementsFile(path: string, options: Partial<Parse
 
 	return Promise.all(
 		doc.Diagnostics.filter(diag => diag.DiagnosticMessage.FilePath.length > 0).map<Promise<Diagnostic>>(async diag => {
-			core.debug("Processing diagnostic: " + JSON.stringify(diag))
+			core.debug(`Processing diagnostic: ${JSON.stringify(diag)}`)
 
 			return {
 				name: diag.DiagnosticName,

@@ -1,7 +1,6 @@
 import * as core from "@actions/core";
 import * as output from "./output";
 import {relative} from "path";
-import {promises as fs, constants as fsConst} from "fs";
 import {parseReplacementsFile} from "./diagnostics";
 
 async function run(): Promise<void> {
@@ -13,7 +12,7 @@ async function run(): Promise<void> {
 		});
 		const noFailure = core.getInput("noFailOnIssue") === "true";
 
-		core.debug("Parsing replacements " + fixesFile);
+		core.debug(`Parsing replacements ${fixesFile}`);
 
 		const diags = await parseReplacementsFile(fixesFile);
 

@@ -1,0 +1,14 @@
+---
+MainSourceFile:  ''
+Diagnostics:
+  - DiagnosticName:  modernize-use-using
+    DiagnosticMessage:
+      Message:         'use ''using'' instead of ''typedef'''
+      FilePath:        '|REPO_PATH|/test_cpp/test.cpp'
+      FileOffset:      39
+      Replacements:
+        - FilePath:        '|REPO_PATH|/test_cpp/test.cpp'
+          Offset:          39
+          Length:          22
+          ReplacementText: 'using myint = long'
+...
